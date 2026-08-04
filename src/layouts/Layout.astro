@@ -25,6 +25,8 @@ const {
   <meta name="description" content={description} />
   <meta name="theme-color" content="#1C1424" />
   <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+  <!-- Failsafe: if JS never runs, reveal-on-scroll sections must not stay hidden. -->
+  <noscript><style>.rv{opacity:1 !important;transform:none !important}</style></noscript>
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -34,41 +36,9 @@ const {
   <slot />
   <Footer />
 
-  <script>
-    // Quick exit (brief §10a): replace() leaves no back-button trail, and the
-    // new blank tab moves focus off this page. Also bound to Escape pressed
-    // twice. This is a real DV-safety requirement, not a nicety.
-    function quickExit() {
-      window.open('about:blank', '_blank');
-      window.location.replace('https://www.google.com/search?q=weather');
-    }
-    document
-      .querySelectorAll('[data-quick-exit]')
-      .forEach((b) => b.addEventListener('click', quickExit));
-
-    let esc = 0;
-    let escT: ReturnType<typeof setTimeout>;
-    document.addEventListener('keydown', (e) => {
-      if (e.key !== 'Escape') return;
-      esc++;
-      clearTimeout(escT);
-      escT = setTimeout(() => (esc = 0), 700);
-      if (esc >= 2) quickExit();
-    });
-
-    // Reveal-on-scroll — the only ambient JS in the design.
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('in');
-            io.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-    document.querySelectorAll('.rv').forEach((el) => io.observe(el));
-  </script>
+  <!-- External + same-origin so the strict CSP (script-src 'self') allows it.
+       An inline script would be CSP-blocked, which hides every reveal section
+       and disables the quick exit. Keep this external; do not inline it. -->
+  <script type="module" src="/site.js" is:inline></script>
 </body>
 </html>

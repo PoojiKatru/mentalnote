@@ -51,7 +51,11 @@ const latest = (await getCollection('articles', ({ data }) => !data.draft))
   <div class="scell">
     <div class="k">Every other week</div>
     <p>New writing, new theme, and what people sent in.</p>
-    <div class="mini"><input type="email" placeholder="your@email.com" aria-label="Email address"><button>Subscribe</button></div>
+    <form class="mini" name="subscribe" method="POST" data-netlify="true" netlify-honeypot="company" action="/?subscribed=1">
+      <input type="hidden" name="form-name" value="subscribe" />
+      <p hidden><label>Leave this empty: <input name="company" /></label></p>
+      <input type="email" name="email" placeholder="your@email.com" aria-label="Email address" required><button type="submit">Subscribe</button>
+    </form>
   </div>
   <div class="scell"><div class="k">For schools</div><p>We speak at assemblies, health classes, and student conferences. <a class="ln" href="/for-schools">See our talks →</a></p></div>
   <div class="scell"><div class="k">The app</div><p>A five-minute daily check-in that installs to your home screen. <a class="ln" href="/the-app">Add it →</a></p></div>
