@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # Type-check content collections + components against the Zod schemas.
+      - name: astro check
+        run: npm run check
+
+      - name: build
+        run: npm run build
+
+      # The important one (brief §9): crisis resources + quick exit on every
+      # built page. A wrong/missing crisis number is the only bug here that can
+      # actually hurt someone.
+      - name: crisis-resource + quick-exit check
+        run: npm run verify:crisis
+
+  # Lighthouse budgets (brief §9): fail under 90 performance / 95 accessibility.
+  # Runs against the built static output.
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./.lighthouserc.json

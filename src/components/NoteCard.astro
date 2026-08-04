@@ -1,0 +1,10 @@
+---
+// A published note on paper (the .sn seed-note style used on /this-month).
+// `source` is kept honest per brief §3/§19.7 — seed notes stay labelled as seed.
+interface Props {
+  body: string;
+  ageLabel: string;
+}
+const { body, ageLabel } = Astro.props;
+---
+<div class="sn paper tape">{body}<i>{ageLabel}</i></div>

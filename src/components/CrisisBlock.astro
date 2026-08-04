@@ -1,0 +1,14 @@
+---
+// The single source of truth for the crisis resources required on every page
+// (brief §10a / §19.1). All three appear in --rose (via .emerg styling), and
+// the CI check in scripts/check-crisis.mjs greps the built output for 988,
+// 741741, 800-799-7233 and 88788. Do NOT edit a number here without verifying
+// it by phone first — a wrong crisis number is worse than no number.
+---
+<div class="emerg">
+  <b>If you need help right now</b>
+  <p>988 Suicide &amp; Crisis Lifeline — call or text 988.<br>
+  Crisis Text Line — text HOME to 741741.<br>
+  National Domestic Violence Hotline — call 800-799-7233, or text START to 88788.</p>
+  <p class="hist">If someone else can see this device, consider clearing your browsing history after visiting.</p>
+</div>

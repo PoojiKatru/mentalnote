@@ -1,0 +1,94 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PaperCard from '../components/PaperCard.astro';
+import { getCollection } from 'astro:content';
+import { formatDay, authorName } from '../lib/format';
+
+const latest = (await getCollection('articles', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 2);
+---
+<Layout title="Teen mental health, peer-led · Mental Note">
+<section class="void">
+  <div class="glow"></div><div class="bounce"></div><div class="vig"></div>
+  <div class="field">
+    <div class="layer far">
+      <div class="nt" style="--r:-8deg;top:5%;left:4%;width:150px;font-size:13px;background:#C9B8A0;color:#3A2F22">It's not a wasted year. I promise.<b>Anon, 17</b></div>
+      <div class="nt typed" style="--r:6deg;top:74%;left:8%;width:152px;font-size:13px;background:#A9B7B1;color:#26332F">Some days are just days.<b>Anon, 15</b></div>
+      <div class="nt" style="--r:-5deg;top:8%;left:74%;width:146px;font-size:13px;background:#C4A8B4;color:#33252E">I stopped waiting to feel ready.<b>Anon, 18</b></div>
+      <div class="nt" style="--r:7deg;top:78%;left:70%;width:150px;font-size:13px;background:#B5A6C4;color:#2C2338">Nobody's thinking about you as much as you think.<b>Anon, 16</b></div>
+    </div>
+    <div class="layer mid">
+      <div class="nt pin" style="--r:-5deg;top:2%;left:26%;width:180px;font-size:15px;padding-top:30px;background:#D9C7A8;color:#3A2F22">You're allowed to be tired without having a reason.<b>Anon, 16</b></div>
+      <div class="nt typed tape" style="--r:6deg;--tr:7deg;top:70%;left:30%;width:184px;font-size:14.5px;background:#BCCBC4;color:#26332F">Please still be playing. Even badly.<b>Anon, 15</b></div>
+      <div class="nt" style="--r:-3deg;top:6%;left:52%;width:188px;font-size:15px;background:#D3BCC7;color:#33252E">You don't owe them the version of you they got used to.<b>Anon, 17</b></div>
+      <div class="nt pin curl" style="--r:8deg;top:74%;left:50%;width:174px;font-size:14.5px;padding-top:30px;background:#C6B6D6;color:#2C2338">Ask twice. People say fine the first time.<b>Anon, 16</b></div>
+    </div>
+    <div class="layer near">
+      <div class="nt tape" style="--r:-6deg;--tr:-9deg;top:44%;left:2%;width:224px;font-size:17px;background:#B5C9C3;color:#20302B">Told my mom. It went nothing like I rehearsed and it was still fine.<b>Anon, 15</b></div>
+      <div class="nt curl" style="--r:5deg;top:26%;left:30%;width:198px;font-size:16.5px;background:#E7CFCD;color:#3D2C2A">One okay day is not a fluke.<b>Anon, 17</b></div>
+      <div class="nt typed pin" style="--r:-2deg;top:20%;left:60%;width:230px;font-size:17px;padding-top:34px;background:#EFE0BC;color:#3A2F22">You're going to think the thing you're worried about right now decides everything. It doesn't.<b>Anon, 17</b></div>
+      <div class="nt" style="--r:7deg;top:58%;left:64%;width:186px;font-size:16.5px;background:#D8C4E4;color:#2E2039">I still don't have it figured out. That's allowed.<b>Anon, 18</b></div>
+    </div>
+  </div>
+  <div class="stage"><div class="stagewrap"><div class="stagecol">
+    <p class="tag">A peer-led mental health project · pilot</p>
+    <h1>Mental <u>Note<svg class="scrawl" viewBox="0 0 300 22" preserveAspectRatio="none" aria-hidden="true"><path d="M4 13 C48 6, 96 17, 143 10 C190 4, 238 15, 296 8"/></svg></u></h1>
+    <p><span class="ph">Mission line placeholder — under fifteen words.</span></p>
+    <div class="acts">
+      <a class="b1" href="/this-month">Write one</a>
+      <a class="b2" href="/how-it-works">How it works →</a>
+    </div>
+    <ul class="proof">
+      <li><b>No account</b>Write without signing up</li>
+      <li><b>Read by a person</b>Both of us, every note</li>
+      <li><b>Nothing stored</b>Check-ins stay on your phone</li>
+    </ul>
+    <p class="cred">Seed notes written by the founders · public submissions open October</p>
+  </div></div></div>
+</section>
+<div class="strip"><div class="wrap sgrid">
+  <div class="scell">
+    <div class="k">Every other week</div>
+    <p>New writing, new theme, and what people sent in.</p>
+    <div class="mini"><input type="email" placeholder="your@email.com" aria-label="Email address"><button>Subscribe</button></div>
+  </div>
+  <div class="scell"><div class="k">For schools</div><p>We speak at assemblies, health classes, and student conferences. <a class="ln" href="/for-schools">See our talks →</a></p></div>
+  <div class="scell"><div class="k">The app</div><p>A five-minute daily check-in that installs to your home screen. <a class="ln" href="/the-app">Add it →</a></p></div>
+</div></div>
+
+<div class="light"><div class="block"><div class="wrap rv">
+  <div class="eyebrow">What we do</div>
+  <h2>Three things, done properly.</h2>
+  <div class="three">
+    <a class="tcard paper lit tape" href="/articles"><h3>Articles</h3><p>Every other week, written by us and sourced. Not written like a pamphlet.</p><span>Read →</span></a>
+    <a class="tcard paper lit tape" href="/the-app"><h3>Daily check-in</h3><p>Five minutes, three questions, on your home screen. Nothing you write leaves your phone.</p><span>Open →</span></a>
+    <a class="tcard paper lit tape" href="/for-schools"><h3>Talks &amp; workshops</h3><p>Assemblies, health classes, student conferences. Two speakers, two different talks.</p><span>Book →</span></a>
+  </div>
+</div></div></div>
+
+<div class="month"><div class="wrap rv">
+  <div class="eyebrow">October · theme one</div>
+  <h2>Notes to your future self.</h2>
+  <p class="lead">Write to yourself one year from now. What do you want them to know about right now?</p>
+  <div class="acts" style="margin-top:32px"><a class="b1" href="/this-month">Write a note</a><a class="b2" href="/how-it-works">What happens next →</a></div>
+</div></div>
+
+<div class="light"><div class="block"><div class="wrap rv">
+  <div class="eyebrow">Latest</div>
+  <h2>Reading.</h2>
+  <div class="arts">
+    {latest.map((a) => (
+      <PaperCard
+        href={`/articles/${a.id}`}
+        date={formatDay(a.data.date)}
+        author={authorName(a.data.author)}
+        minutes={a.data.minutes}
+        title={a.data.title}
+        excerpt={a.data.excerpt}
+      />
+    ))}
+  </div>
+  <a class="more" href="/articles">All articles →</a>
+</div></div></div>
+</Layout>

@@ -1,0 +1,40 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { formatDay, authorName } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles', ({ data }) => !data.draft);
+  return articles.map((a) => ({ params: { slug: a.id }, props: { article: a } }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const d = article.data;
+---
+<Layout title={`${d.title} · Mental Note`} description={d.excerpt} active="articles">
+<div class="phead"><div class="wrap">
+  <div class="eyebrow">{d.theme}</div>
+  <h1>{d.title}</h1>
+  <p class="lead">{formatDay(d.date)} · {authorName(d.author)} · {d.minutes} min</p>
+</div></div>
+<div class="light"><div class="block" style="padding-top:48px"><div class="wrap rv">
+  <article class="prose"><Content /></article>
+  <a class="more" href="/articles">← All articles</a>
+</div></div></div>
+</Layout>
+<style>
+  /* Article body — built from the existing design tokens, not a new look. */
+  .prose{max-width:64ch}
+  .prose :global(p){margin-top:18px;font-size:17px;line-height:1.72;color:#4A4256}
+  .prose :global(p:first-child){margin-top:0}
+  .prose :global(h2){font-family:var(--display);font-weight:300;letter-spacing:-.03em;font-size:clamp(26px,3.4vw,36px);margin-top:44px}
+  .prose :global(h3){margin-top:32px;font-size:23px}
+  .prose :global(em){font-style:italic}
+  .prose :global(strong){font-weight:700}
+  .prose :global(a){color:#7A4F8F;border-bottom:1px solid rgba(122,79,143,.35)}
+  .prose :global(ul),.prose :global(ol){margin-top:16px;padding-left:22px}
+  .prose :global(li){margin-top:6px;color:#4A4256}
+  .prose :global(blockquote){margin-top:22px;padding-left:18px;border-left:2px solid var(--thistle);color:#5A5265;font-style:italic}
+  .prose + .more{margin-top:44px}
+</style>

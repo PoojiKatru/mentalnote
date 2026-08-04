@@ -1,0 +1,92 @@
+# Sveltia CMS — git-based, GitHub OAuth (brief §3/§6). This config MIRRORS the
+# Zod schemas in src/content.config.ts exactly. If you change a schema there,
+# change it here too, or the CMS will write frontmatter the build rejects.
+#
+# Acceptance test (brief §3): the non-technical co-founder must be able to write
+# and publish an article FROM HER PHONE, without help and without touching git.
+# Run that test before wiring anything else.
+
+backend:
+  name: github
+  repo: your-org/mentalnote # TODO: set to the real GitHub owner/repo before launch
+  branch: main
+  # PRs only — no direct pushes to main. CMS commits follow the same path as
+  # hand-written code (brief §9).
+  squash_merges: true
+
+# Create a pull request per change instead of committing straight to main.
+publish_mode: editorial_workflow
+
+# No media library is needed yet; founder photos and the note-wall image come
+# later (brief §20). Point at the same public dir Astro serves.
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: articles
+    label: Articles
+    label_singular: Article
+    folder: src/content/articles
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    preview_path: articles/{{slug}}
+    summary: '{{title}} — {{author}}'
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: date, label: Date, widget: datetime, time_format: false, format: 'YYYY-MM-DD' }
+      - name: author
+        label: Author
+        widget: select
+        options:
+          - { label: Co-founder 1, value: co-founder-1 }
+          - { label: Co-founder 2, value: co-founder-2 }
+      - { name: theme, label: Theme label, widget: string, hint: 'Display label, e.g. "Future self"' }
+      - { name: excerpt, label: Excerpt, widget: text }
+      - { name: minutes, label: Reading time (min), widget: number, value_type: int, min: 1 }
+      - { name: draft, label: Draft, widget: boolean, default: true }
+      - { name: body, label: Body, widget: markdown }
+
+  - name: themes
+    label: Themes
+    label_singular: Theme
+    folder: src/content/themes
+    create: true
+    slug: '{{year}}-{{month}}-{{slug}}'
+    extension: md
+    format: frontmatter
+    sortable_fields: [year, month]
+    fields:
+      - { name: month, label: Month (1-12), widget: number, value_type: int, min: 1, max: 12 }
+      - { name: year, label: Year, widget: number, value_type: int }
+      - { name: name, label: Theme name, widget: string }
+      - { name: prompt, label: Prompt, widget: text }
+      - name: status
+        label: Status
+        widget: select
+        default: upcoming
+        options: [upcoming, open, archived]
+
+  # Notes are keyed on a frontmatter field literally named `body`, so the markdown
+  # entry body is unused here. Every note MUST keep its honest `source` label.
+  - name: notes
+    label: Published notes
+    label_singular: Note
+    folder: src/content/notes
+    create: true
+    slug: '{{source}}-{{slug}}'
+    extension: md
+    format: frontmatter
+    summary: '{{body}}'
+    fields:
+      - { name: body, label: Note text, widget: text }
+      - { name: ageLabel, label: Age label, widget: string, hint: 'e.g. "Anonymous, 15"' }
+      - { name: theme, label: Theme name, widget: string }
+      - { name: publishedAt, label: Published, widget: datetime, time_format: false, format: 'YYYY-MM-DD' }
+      - name: source
+        label: Source
+        widget: select
+        default: submission
+        options: [seed, submission]

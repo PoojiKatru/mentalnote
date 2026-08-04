@@ -1,0 +1,25 @@
+---
+interface Props {
+  /** nav key for the current page, e.g. 'articles'. Home passes nothing. */
+  active?: string;
+}
+const { active } = Astro.props;
+
+const nav = [
+  { href: '/how-it-works', label: 'How it works', key: 'how-it-works' },
+  { href: '/this-month', label: 'This month', key: 'this-month' },
+  { href: '/articles', label: 'Articles', key: 'articles' },
+  { href: '/the-app', label: 'The app', key: 'the-app' },
+  { href: '/our-story', label: 'Our story', key: 'our-story' },
+  { href: '/for-schools', label: 'For schools', key: 'for-schools' },
+];
+---
+<div class="top"><div class="wrap topbar">
+  <a class="brand" href="/">mental note</a>
+  <nav><ul>
+    {nav.map((n) => (
+      <li><a href={n.href} class={active === n.key ? 'on' : undefined}>{n.label}</a></li>
+    ))}
+    <li><a class="give" href="/support">Donate</a></li>
+  </ul></nav>
+</div></div>

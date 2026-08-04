@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+
+// The rolling theme calendar on /this-month, driven by the themes collection.
+const MON = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const themes = (await getCollection('themes')).sort(
+  (a, b) => a.data.year - b.data.year || a.data.month - b.data.month
+);
+
+// The <i> label is derived, not stored, so the schema stays exactly the brief's:
+// the single open theme reads "Open now"; the earliest upcoming after it reads
+// "Next"; everything else is blank.
+let nextAssigned = false;
+const rows = themes.map((t) => {
+  let label = '';
+  if (t.data.status === 'open') label = 'Open now';
+  else if (t.data.status === 'upcoming' && !nextAssigned) {
+    label = 'Next';
+    nextAssigned = true;
+  }
+  return {
+    mon: MON[t.data.month],
+    name: t.data.name,
+    now: t.data.status === 'open',
+    label,
+  };
+});
+---
+<ol class="months">
+  {rows.map((r) => (
+    <li class={r.now ? 'now' : undefined}><span>{r.mon}</span><b>{r.name}</b><i>{r.label}</i></li>
+  ))}
+</ol>

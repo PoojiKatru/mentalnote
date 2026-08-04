@@ -1,0 +1,20 @@
+---
+// A pinned-paper article card (the .art style used on the homepage "Reading"
+// section and the /articles index). nth-child rotation/tape are driven by CSS,
+// so these must render as siblings inside an `.arts` grid.
+interface Props {
+  href: string;
+  date: string; // preformatted, e.g. "8 Oct"
+  author: string; // display name, e.g. "Co-founder 2"
+  minutes: number;
+  theme?: string; // display theme label, e.g. "Future self"
+  title: string;
+  excerpt: string;
+}
+const { href, date, author, minutes, theme, title, excerpt } = Astro.props;
+---
+<a class="art paper lit tape dk" href={href}>
+  <div class="when">{date} · <b>{author}</b> · {minutes} min{theme ? ` · ${theme}` : ''}</div>
+  <h3>{title}</h3>
+  <p>{excerpt}</p>
+</a>

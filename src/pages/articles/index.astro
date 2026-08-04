@@ -1,0 +1,45 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PaperCard from '../../components/PaperCard.astro';
+import { getCollection } from 'astro:content';
+import { formatDay, authorName } from '../../lib/format';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+---
+<Layout title="Articles · Mental Note" active="articles">
+<div class="phead"><div class="wrap">
+  <div class="eyebrow">Articles</div>
+  <h1>Reading.</h1>
+  <p class="lead">Every other week. One of us writes it, the other reads it before it goes up.</p>
+</div></div>
+<div class="light"><div class="block" style="padding-top:48px"><div class="wrap rv">
+  <div class="arts">
+    {articles.map((a) => (
+      <PaperCard
+        href={`/articles/${a.id}`}
+        date={formatDay(a.data.date)}
+        author={authorName(a.data.author)}
+        minutes={a.data.minutes}
+        theme={a.data.theme}
+        title={a.data.title}
+        excerpt={a.data.excerpt}
+      />
+    ))}
+  </div>
+  <p class="cnt2" style="margin-top:36px">{articles.length} pieces so far. New writing every other week starting October.</p>
+</div></div>
+
+<div class="block" style="padding-top:0"><div class="wrap rv">
+  <div class="eyebrow">On Instagram</div>
+  <h2>This week's questions.</h2>
+  <div class="igwrap">
+    <div class="ig paper lit tape dk">What's one thing you hope is different a year from now?<em>@mentalnote</em></div>
+    <div class="ig paper lit tape dk">What would past-you be surprised you're handling?<em>@mentalnote</em></div>
+    <div class="ig paper lit tape dk">What advice would you give someone starting this year?<em>@mentalnote</em></div>
+    <div class="ig paper lit tape dk">What's the pressure nobody talks about at your school?<em>@mentalnote</em></div>
+  </div>
+  <a class="more" href="#">Follow @mentalnote →</a>
+</div></div></div>
+</Layout>
