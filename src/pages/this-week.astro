@@ -3,21 +3,19 @@ import Layout from '../layouts/Layout.astro';
 import NoteCard from '../components/NoteCard.astro';
 import ThemeCalendar from '../components/ThemeCalendar.astro';
 import { getCollection } from 'astro:content';
-
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+import { formatDay } from '../lib/format';
 
 const themes = await getCollection('themes');
 const open = themes.find((t) => t.data.status === 'open')!;
-const monthName = MONTHS[open.data.month - 1];
 
 // Seed notes for the open theme (kept honestly labelled as seed — brief §19.7).
 const seedNotes = (await getCollection('notes'))
   .filter((n) => n.data.source === 'seed' && n.data.theme === open.data.name)
   .slice(0, 2);
 ---
-<Layout title="This month · Mental Note" active="this-month">
+<Layout title="This week · Mental Note" active="this-week">
 <div class="month phead-dark"><div class="wrap">
-  <div class="eyebrow">{monthName} · theme one</div>
+  <div class="eyebrow">Week of {formatDay(open.data.startDate)}</div>
   <h2>{open.data.name}.</h2>
   <p class="lead">{open.data.prompt}</p>
   <div class="mgrid">
@@ -55,10 +53,10 @@ const seedNotes = (await getCollection('notes'))
 </div></div>
 
 <div class="light"><div class="block"><div class="wrap rv">
-  <div class="eyebrow">The year ahead</div>
-  <h2>A new theme every month.</h2>
-  <p class="lead">Each theme runs for a month across the notes, the articles, the Instagram questions, and the check-in.</p>
+  <div class="eyebrow">The weeks ahead</div>
+  <h2>A new theme every week.</h2>
+  <p class="lead">Each theme runs for a week across the notes, the articles, the Instagram questions, and the check-in.</p>
   <ThemeCalendar />
-  <p class="cnt2">Past months stay in the archive. Nothing gets deleted.</p>
+  <p class="cnt2">Past weeks stay in the archive. Nothing gets deleted.</p>
 </div></div></div>
 </Layout>

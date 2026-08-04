@@ -7,6 +7,8 @@ import { formatDay, authorName } from '../lib/format';
 const latest = (await getCollection('articles', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 2);
+
+const openTheme = (await getCollection('themes')).find((t) => t.data.status === 'open')!;
 ---
 <Layout title="Teen mental health, peer-led · Mental Note">
 <section class="void">
@@ -36,7 +38,7 @@ const latest = (await getCollection('articles', ({ data }) => !data.draft))
     <h1>Mental <u>Note<svg class="scrawl" viewBox="0 0 300 22" preserveAspectRatio="none" aria-hidden="true"><path d="M4 13 C48 6, 96 17, 143 10 C190 4, 238 15, 296 8"/></svg></u></h1>
     <p><span class="ph">Our mission is to give people a platform to voice their thoughts, both good and bad and provide a support system for those who need it.</span></p>
     <div class="acts">
-      <a class="b1" href="/this-month">Write one</a>
+      <a class="b1" href="/this-week">Write one</a>
       <a class="b2" href="/how-it-works">How it works →</a>
     </div>
     <ul class="proof">
@@ -72,10 +74,10 @@ const latest = (await getCollection('articles', ({ data }) => !data.draft))
 </div></div></div>
 
 <div class="month"><div class="wrap rv">
-  <div class="eyebrow">October · theme one</div>
-  <h2>Notes to your future self.</h2>
-  <p class="lead">Write to yourself one year from now. What do you want them to know about right now?</p>
-  <div class="acts" style="margin-top:32px"><a class="b1" href="/this-month">Write a note</a><a class="b2" href="/how-it-works">What happens next →</a></div>
+  <div class="eyebrow">Week of {formatDay(openTheme.data.startDate)} · this week's theme</div>
+  <h2>{openTheme.data.name}.</h2>
+  <p class="lead">{openTheme.data.prompt}</p>
+  <div class="acts" style="margin-top:32px"><a class="b1" href="/this-week">Write a note</a><a class="b2" href="/how-it-works">What happens next →</a></div>
 </div></div>
 
 <div class="light"><div class="block"><div class="wrap rv">

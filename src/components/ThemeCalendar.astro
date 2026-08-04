@@ -1,26 +1,25 @@
 ---
 import { getCollection } from 'astro:content';
+import { formatDay } from '../lib/format';
 
-// The rolling theme calendar on /this-month, driven by the themes collection.
-const MON = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
+// The rolling weekly theme calendar on /this-week, driven by the themes collection.
 const themes = (await getCollection('themes')).sort(
-  (a, b) => a.data.year - b.data.year || a.data.month - b.data.month
+  (a, b) => a.data.startDate.getTime() - b.data.startDate.getTime()
 );
 
-// The <i> label is derived, not stored, so the schema stays exactly the brief's:
-// the single open theme reads "Open now"; the earliest upcoming after it reads
-// "Next"; everything else is blank.
+// The <i> label is derived, not stored, so the schema stays lean: the single
+// open theme reads "This week"; the earliest upcoming after it reads "Next";
+// everything else is blank.
 let nextAssigned = false;
 const rows = themes.map((t) => {
   let label = '';
-  if (t.data.status === 'open') label = 'Open now';
+  if (t.data.status === 'open') label = 'This week';
   else if (t.data.status === 'upcoming' && !nextAssigned) {
     label = 'Next';
     nextAssigned = true;
   }
   return {
-    mon: MON[t.data.month],
+    when: formatDay(t.data.startDate),
     name: t.data.name,
     now: t.data.status === 'open',
     label,
@@ -29,6 +28,6 @@ const rows = themes.map((t) => {
 ---
 <ol class="months">
   {rows.map((r) => (
-    <li class={r.now ? 'now' : undefined}><span>{r.mon}</span><b>{r.name}</b><i>{r.label}</i></li>
+    <li class={r.now ? 'now' : undefined}><span>{r.when}</span><b>{r.name}</b><i>{r.label}</i></li>
   ))}
 </ol>

@@ -62,17 +62,17 @@ collections:
       - { name: date, label: Date, widget: datetime, time_format: false, format: 'YYYY-MM-DD' }
       - { name: draft, label: Keep as draft (not published yet), widget: boolean, default: true }
 
-  # ── Themes: the monthly calendar. You'll touch this rarely. ─────────────────
+  # ── Themes: the weekly calendar. You'll touch this rarely. ──────────────────
   - name: themes
-    label: Monthly themes
+    label: Weekly themes
     label_singular: Theme
-    description: The rolling monthly theme calendar shown on "This month".
+    description: The rolling weekly theme calendar shown on "This week".
     folder: src/content/themes
     create: true
-    slug: '{{year}}-{{month}}-{{slug}}'
+    slug: '{{startDate}}-{{slug}}'
     extension: md
     format: frontmatter
-    sortable_fields: [year, month]
+    sortable_fields: [startDate]
     editor:
       preview: false
     fields:
@@ -86,8 +86,7 @@ collections:
           - { label: Open now, value: open }
           - { label: Upcoming, value: upcoming }
           - { label: Archived, value: archived }
-      - { name: month, label: Month (1–12), widget: number, value_type: int, min: 1, max: 12 }
-      - { name: year, label: Year, widget: number, value_type: int, default: 2026 }
+      - { name: startDate, label: Week starting (the Monday), widget: datetime, time_format: false, format: 'YYYY-MM-DD' }
 
   # ── Notes: published seed/submitted notes on the wall. ──────────────────────
   - name: notes

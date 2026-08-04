@@ -24,8 +24,8 @@ const articles = defineCollection({
 const themes = defineCollection({
   loader: glob({ base: './src/content/themes', pattern: '**/*.md' }),
   schema: z.object({
-    month: z.number().int().min(1).max(12),
-    year: z.number().int(),
+    // A theme runs for one week. startDate is the week it opens (its Monday).
+    startDate: z.date(),
     name: z.string(),
     prompt: z.string(),
     status: z.enum(['upcoming', 'open', 'archived']),

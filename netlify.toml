@@ -5,6 +5,21 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# ─── Redirects ──────────────────────────────────────────────────────────────
+# Themes went weekly, so /this-month was renamed to /this-week. Keep old links
+# (shared, printed on a speaker sheet, etc.) working.
+[[redirects]]
+  from = "/this-month"
+  to = "/this-week"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/this-month/"
+  to = "/this-week"
+  status = 301
+  force = true
+
 # ─── Security headers (brief §10) ───────────────────────────────────────────
 # Fonts are self-hosted, so there are no external font/style origins. Astro
 # bundles component <script>s to hashed same-origin files, so script-src stays
