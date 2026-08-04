@@ -4,7 +4,6 @@
 #
 # Acceptance test (brief §3): the non-technical co-founder must be able to write
 # and publish an article FROM HER PHONE, without help and without touching git.
-# Run that test before wiring anything else.
 
 backend:
   name: github
@@ -17,76 +16,101 @@ backend:
 # Create a pull request per change instead of committing straight to main.
 publish_mode: editorial_workflow
 
-# No media library is needed yet; founder photos and the note-wall image come
-# later (brief §20). Point at the same public dir Astro serves.
+# Branding so the editor feels like Mental Note (the app chrome itself can't be
+# recolored — this is what the CMS exposes).
+site_url: https://mentalnoteorg.netlify.app
+display_url: https://mentalnoteorg.netlify.app
+logo_url: /logo.svg
+
+# Article images (founder photos, note-wall image later). Kept simple for now.
 media_folder: public/uploads
 public_folder: /uploads
 
 collections:
+  # ── Articles: the thing you'll write most. Kept deliberately simple. ────────
   - name: articles
     label: Articles
     label_singular: Article
+    description: Write and publish an article. Fill the title and the body; the rest has sensible defaults.
     folder: src/content/articles
     create: true
     slug: '{{slug}}'
     extension: md
     format: frontmatter
     preview_path: articles/{{slug}}
-    summary: '{{title}} — {{author}}'
+    summary: '{{title}}'
     sortable_fields: [date, title]
+    # No split preview pane — just a clean writing box.
+    editor:
+      preview: false
     fields:
       - { name: title, label: Title, widget: string }
-      - { name: date, label: Date, widget: datetime, time_format: false, format: 'YYYY-MM-DD' }
+      - name: body
+        label: Article
+        widget: markdown
+        hint: 'Just write. Use the toolbar for bold, headings, and links — no code needed.'
       - name: author
-        label: Author
+        label: Who wrote it
         widget: select
+        default: co-founder-1
         options:
           - { label: Co-founder 1, value: co-founder-1 }
           - { label: Co-founder 2, value: co-founder-2 }
-      - { name: theme, label: Theme label, widget: string, hint: 'Display label, e.g. "Future self"' }
-      - { name: excerpt, label: Excerpt, widget: text }
-      - { name: minutes, label: Reading time (min), widget: number, value_type: int, min: 1 }
-      - { name: draft, label: Draft, widget: boolean, default: true }
-      - { name: body, label: Body, widget: markdown }
+      - { name: theme, label: Theme, widget: string, default: 'Future self', hint: 'The month''s theme, e.g. "Future self".' }
+      - { name: excerpt, label: One-line summary, widget: text, hint: 'The teaser shown on the Articles page.' }
+      - { name: minutes, label: Reading time (minutes), widget: number, value_type: int, default: 4, min: 1 }
+      - { name: date, label: Date, widget: datetime, time_format: false, format: 'YYYY-MM-DD' }
+      - { name: draft, label: Keep as draft (not published yet), widget: boolean, default: true }
 
+  # ── Themes: the monthly calendar. You'll touch this rarely. ─────────────────
   - name: themes
-    label: Themes
+    label: Monthly themes
     label_singular: Theme
+    description: The rolling monthly theme calendar shown on "This month".
     folder: src/content/themes
     create: true
     slug: '{{year}}-{{month}}-{{slug}}'
     extension: md
     format: frontmatter
     sortable_fields: [year, month]
+    editor:
+      preview: false
     fields:
-      - { name: month, label: Month (1-12), widget: number, value_type: int, min: 1, max: 12 }
-      - { name: year, label: Year, widget: number, value_type: int }
       - { name: name, label: Theme name, widget: string }
-      - { name: prompt, label: Prompt, widget: text }
+      - { name: prompt, label: Writing prompt, widget: text }
       - name: status
         label: Status
         widget: select
         default: upcoming
-        options: [upcoming, open, archived]
+        options:
+          - { label: Open now, value: open }
+          - { label: Upcoming, value: upcoming }
+          - { label: Archived, value: archived }
+      - { name: month, label: Month (1–12), widget: number, value_type: int, min: 1, max: 12 }
+      - { name: year, label: Year, widget: number, value_type: int, default: 2026 }
 
-  # Notes are keyed on a frontmatter field literally named `body`, so the markdown
-  # entry body is unused here. Every note MUST keep its honest `source` label.
+  # ── Notes: published seed/submitted notes on the wall. ──────────────────────
   - name: notes
-    label: Published notes
+    label: Notes
     label_singular: Note
+    description: Short anonymous notes shown on the wall. Keep the source honest.
     folder: src/content/notes
     create: true
     slug: '{{source}}-{{slug}}'
     extension: md
     format: frontmatter
     summary: '{{body}}'
+    editor:
+      preview: false
     fields:
-      - { name: body, label: Note text, widget: text }
-      - { name: ageLabel, label: Age label, widget: string, hint: 'e.g. "Anonymous, 15"' }
-      - { name: theme, label: Theme name, widget: string }
-      - { name: publishedAt, label: Published, widget: datetime, time_format: false, format: 'YYYY-MM-DD' }
+      - { name: body, label: The note, widget: text }
+      - { name: ageLabel, label: Signed (e.g. "Anonymous, 15"), widget: string, default: 'Anonymous, ' }
+      - { name: theme, label: Theme, widget: string, default: 'Notes to your future self' }
       - name: source
-        label: Source
+        label: Where it came from
         widget: select
         default: submission
-        options: [seed, submission]
+        options:
+          - { label: Seed (written by us), value: seed }
+          - { label: Submission (from a reader), value: submission }
+      - { name: publishedAt, label: Published date, widget: datetime, time_format: false, format: 'YYYY-MM-DD' }

@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 64" width="260" height="64" role="img" aria-label="mental note">
+  <text x="4" y="40" font-family="Georgia, 'Times New Roman', serif" font-size="34" font-style="italic" fill="#F7F3FA">mental note</text>
+  <path d="M6 50 C64 44, 130 54, 250 46" fill="none" stroke="#C4526B" stroke-width="3" stroke-linecap="round"/>
+</svg>
