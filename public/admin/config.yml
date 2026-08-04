@@ -8,7 +8,7 @@
 
 backend:
   name: github
-  repo: your-org/mentalnote # TODO: set to the real GitHub owner/repo before launch
+  repo: PoojiKatru/mentalnote
   branch: main
   # PRs only — no direct pushes to main. CMS commits follow the same path as
   # hand-written code (brief §9).
