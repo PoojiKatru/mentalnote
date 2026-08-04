@@ -5,11 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex" />
   <title>Content · Mental Note</title>
+  <style>
+    /* Self-hosted Material Symbols — Sveltia expects the host page to provide the
+       icon font. Without it, every icon renders as its ligature name as text
+       ("bookmark_manager", "photo_library", …). font-display:block avoids showing
+       that text while the font loads. */
+    @font-face {
+      font-family: 'Material Symbols Outlined';
+      font-style: normal;
+      font-weight: 100 700;
+      font-display: block;
+      src: url('/admin/material-symbols-outlined.woff2') format('woff2');
+    }
+
+    /* Mental Note tint. Sveltia's whole palette (accent + every background) is
+       derived from one variable, hsl(var(--sui-base-hue) …). Shifting the hue to
+       plum/violet recolors the CMS cohesively without touching contrast. The app
+       chrome can't be fully rebranded, but this carries the scheme through — good
+       enough to demo to schools. */
+    :root {
+      --sui-base-hue: 268 !important;
+    }
+  </style>
 </head>
 <body>
   <!-- Sveltia CMS, self-hosted (not the CDN) so it works under the site CSP and
-       on flaky school wifi. Update the bundle with: npm run build then re-fetch
-       @sveltia/cms if a new version is needed. -->
+       on flaky school wifi. -->
   <script src="/admin/sveltia-cms.js"></script>
 </body>
 </html>
