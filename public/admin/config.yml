@@ -88,22 +88,35 @@ collections:
           - { label: Archived, value: archived }
       - { name: startDate, label: Week starting (the Monday), widget: datetime, time_format: false, format: 'YYYY-MM-DD' }
 
-  # ── Notes: published seed/submitted notes on the wall. ──────────────────────
+  # ── Notes: the review queue. Reader submissions arrive here as "Pending
+  #    review". Approve by setting Status -> Published; reject by deleting. ─────
   - name: notes
     label: Notes
     label_singular: Note
-    description: Short anonymous notes shown on the wall. Keep the source honest.
+    description: Reader submissions land here as "Pending review". Read one, then set it to Published to put it on the wall — or delete it to reject it.
     folder: src/content/notes
     create: true
     slug: '{{source}}-{{slug}}'
     extension: md
     format: frontmatter
-    summary: '{{body}}'
+    summary: '{{status}} · {{body}}'
+    sortable_fields: [publishedAt, status]
+    # One-click filter to the moderation queue.
+    view_filters:
+      - { label: Pending review, field: status, pattern: pending }
+      - { label: Published (on the wall), field: status, pattern: published }
     editor:
       preview: false
     fields:
+      - name: status
+        label: Show on the wall?
+        widget: select
+        default: published
+        options:
+          - { label: Pending review (hidden), value: pending }
+          - { label: Published (live on the wall), value: published }
       - { name: body, label: The note, widget: text }
-      - { name: ageLabel, label: Signed (e.g. "Anonymous, 15"), widget: string, default: 'Anonymous, ' }
+      - { name: ageLabel, label: Signed (e.g. "Anonymous, 15"), widget: string, default: 'Anonymous' }
       - { name: theme, label: Theme, widget: string, default: 'Notes to your future self' }
       - name: source
         label: Where it came from
@@ -112,4 +125,4 @@ collections:
         options:
           - { label: Seed (written by us), value: seed }
           - { label: Submission (from a reader), value: submission }
-      - { name: publishedAt, label: Published date, widget: datetime, time_format: false, format: 'YYYY-MM-DD' }
+      - { name: publishedAt, label: Date, widget: datetime, time_format: false, format: 'YYYY-MM-DD' }

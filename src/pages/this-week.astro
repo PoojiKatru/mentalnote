@@ -8,9 +8,12 @@ import { formatDay } from '../lib/format';
 const themes = await getCollection('themes');
 const open = themes.find((t) => t.data.status === 'open')!;
 
-// Seed notes for the open theme (kept honestly labelled as seed — brief §19.7).
-const seedNotes = (await getCollection('notes'))
-  .filter((n) => n.data.source === 'seed' && n.data.theme === open.data.name)
+// The wall shows only PUBLISHED notes for the open theme (seed notes plus any
+// submissions a founder has approved in the CMS). Pending submissions never
+// appear here. Newest first, so approved notes surface over the seed ones.
+const wallNotes = (await getCollection('notes'))
+  .filter((n) => n.data.status === 'published' && n.data.theme === open.data.name)
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
   .slice(0, 2);
 ---
 <Layout title="This week · Mental Note" active="this-week">
@@ -21,16 +24,15 @@ const seedNotes = (await getCollection('notes'))
   <div class="mgrid">
     {/*
       Privacy separation (brief §4 / §19.3): the note and the optional email must
-      reach SEPARATE destinations with no shared row. They are two independent
-      Netlify forms. The email <input> is associated to the "subscribe" form via
-      its form="subscribe" attribute, so the note form's "Send it" submits the
-      note ONLY — the email is never in the same submission. Honeypots, no CAPTCHA
-      (brief §11). Fallback if the co-founder prefers: swap the subscribe form for
-      a Tally embed; nothing else changes.
+      reach SEPARATE destinations. The NOTE posts to the submit-note function,
+      which commits it as a PENDING entry for CMS review. The email is associated
+      to the separate "subscribe" Netlify form via form="subscribe", so "Send it"
+      submits the note ONLY — the email is never in the same request. Honeypot,
+      no CAPTCHA (brief §11).
     */}
-    <form class="compose" name="note" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-      <input type="hidden" name="form-name" value="note" />
+    <form class="compose" name="note" method="POST" action="/.netlify/functions/submit-note">
       <p hidden><label>Leave this empty: <input name="bot-field" /></label></p>
+      <input type="hidden" name="theme" value={open.data.name} />
       <label for="n">Your note</label>
       <textarea id="n" name="note" placeholder="Dear me, one year from now…" required></textarea>
       <div class="optin">
@@ -46,8 +48,8 @@ const seedNotes = (await getCollection('notes'))
       <button type="submit" tabindex="-1" aria-hidden="true">Subscribe</button>
     </form>
     <div class="stk">
-      {seedNotes.map((n) => <NoteCard body={n.data.body} ageLabel={n.data.ageLabel} />)}
-      <div class="cnt"><span class="stat">Seed notes · written by us</span><br>The wall fills up as people send theirs in.</div>
+      {wallNotes.map((n) => <NoteCard body={n.data.body} ageLabel={n.data.ageLabel} />)}
+      <div class="cnt"><span class="stat">Read by us before anything goes up</span><br>The wall fills up as people send theirs in.</div>
     </div>
   </div>
 </div></div>

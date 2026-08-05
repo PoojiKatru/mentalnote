@@ -42,6 +42,10 @@ const notes = defineCollection({
     // The site publicly labels founder-written notes as seed notes. Keep that
     // honest here, not just in the copy (brief §3).
     source: z.enum(['seed', 'submission']),
+    // Moderation gate. Public submissions arrive as 'pending' and NEVER render
+    // until a founder sets 'published' in the CMS (brief §19.6 — human decision,
+    // never automatic). Fail closed: default to pending.
+    status: z.enum(['pending', 'published']).default('pending'),
   }),
 });
 
