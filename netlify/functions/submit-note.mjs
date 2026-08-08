@@ -59,7 +59,11 @@ export default async (req) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      message: 'note: new submission (pending review)',
+      // [skip ci]: a pending note is invisible on the public site until a founder
+      // approves it, so this commit must NOT trigger a build. The CMS still sees
+      // the note immediately (it reads GitHub directly). A build only runs later,
+      // when someone approves it. This keeps submissions free of build minutes.
+      message: 'note: new submission (pending review) [skip ci]',
       content: Buffer.from(file, 'utf8').toString('base64'),
       branch: BRANCH,
     }),
