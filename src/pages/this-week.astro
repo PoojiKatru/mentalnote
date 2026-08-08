@@ -30,7 +30,7 @@ const wallNotes = (await getCollection('notes'))
       submits the note ONLY — the email is never in the same request. Honeypot,
       no CAPTCHA (brief §11).
     */}
-    <form class="compose" name="note" method="POST" action="/.netlify/functions/submit-note">
+    <form class="compose" name="note" method="POST" action="/api/submit-note">
       <p hidden><label>Leave this empty: <input name="bot-field" /></label></p>
       <input type="hidden" name="theme" value={open.data.name} />
       <label for="n">Your note</label>
@@ -42,8 +42,7 @@ const wallNotes = (await getCollection('notes'))
       </div>
       <div class="crow"><small>Your note is anonymous. Read by us before anything is published.</small><button class="send" type="submit">Send it</button></div>
     </form>
-    <form id="subscribe" name="subscribe" method="POST" data-netlify="true" netlify-honeypot="company" hidden>
-      <input type="hidden" name="form-name" value="subscribe" />
+    <form id="subscribe" name="subscribe" method="POST" action="/api/subscribe" hidden>
       <p hidden><label>Leave this empty: <input name="company" /></label></p>
       <button type="submit" tabindex="-1" aria-hidden="true">Subscribe</button>
     </form>

@@ -58,8 +58,7 @@ const openTheme = (await getCollection('themes')).find((t) => t.data.status === 
   <div class="scell">
     <div class="k">Every other week</div>
     <p>New writing, new theme, and what people sent in.</p>
-    <form class="mini" name="subscribe" method="POST" data-netlify="true" netlify-honeypot="company" action="/?subscribed=1">
-      <input type="hidden" name="form-name" value="subscribe" />
+    <form class="mini" name="subscribe" method="POST" action="/api/subscribe">
       <p hidden><label>Leave this empty: <input name="company" /></label></p>
       <input type="email" name="email" placeholder="your@email.com" aria-label="Email address" required><button type="submit">Subscribe</button>
     </form>
