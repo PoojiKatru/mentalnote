@@ -1,0 +1,4 @@
+# Cloudflare Pages redirects — ports netlify.toml. Themes went weekly, so
+# /this-month was renamed to /this-week; keep old links working.
+/this-month   /this-week   301
+/this-month/  /this-week   301
