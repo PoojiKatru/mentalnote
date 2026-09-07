@@ -18,8 +18,8 @@ publish_mode: editorial_workflow
 
 # Branding so the editor feels like Mental Note (the app chrome itself can't be
 # recolored — this is what the CMS exposes).
-site_url: https://mentalnoteorg.netlify.app
-display_url: https://mentalnoteorg.netlify.app
+site_url: https://mentalnote.pages.dev
+display_url: https://mentalnote.pages.dev
 logo_url: /logo.svg
 
 # Article images (founder photos, note-wall image later). Kept simple for now.

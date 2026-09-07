@@ -26,7 +26,7 @@ const wallNotes = (await getCollection('notes'))
       Privacy separation (brief §4 / §19.3): the note and the optional email must
       reach SEPARATE destinations. The NOTE posts to the submit-note function,
       which commits it as a PENDING entry for CMS review. The email is associated
-      to the separate "subscribe" Netlify form via form="subscribe", so "Send it"
+      to the separate "subscribe" endpoint via form="subscribe", so "Send it"
       submits the note ONLY — the email is never in the same request. Honeypot,
       no CAPTCHA (brief §11).
     */}

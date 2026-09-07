@@ -1,4 +1,4 @@
-# Cloudflare Pages headers — ports the rules from netlify.toml (brief §10/§12).
+# Cloudflare Pages headers — security + caching rules (brief §10/§12).
 # For overlapping paths, later rules override earlier ones for the same header,
 # so /admin/* below tightens/loosens on top of the site-wide /* block.
 

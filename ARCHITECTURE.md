@@ -1,6 +1,6 @@
 # Mental Note — Build Brief for Claude Code
 
-**Domain:** mentalnote.org
+**Domain:** none yet — live at `mentalnote.pages.dev`. (`mentalnote.org` is a third party's expired registration, not ours.)
 **Launch:** early October 2026
 **Built by:** two high school students, one of whom does all engineering
 **Budget:** $0/month plus the domain. This is a hard constraint, not a preference.
@@ -72,14 +72,16 @@ notes:    { body, ageLabel, theme, publishedAt, source: enum(['seed','submission
 
 **Now: none.** There is no backend. Do not create one.
 
-Form handling:
-- **Note submissions** and **school booking enquiries** → Netlify Forms (free tier: 100 submissions/month) or an embedded Tally form. Either is fine; Tally is easier for the co-founder to edit.
-- **Newsletter** → the email provider's embedded form, posting directly to them.
+Form handling — two Cloudflare Pages Functions, in `functions/api/`:
+- **Note submissions** → `POST /api/submit-note` → commits a `status: pending` markdown file to `src/content/notes/` for review in the CMS.
+- **Newsletter** → `POST /api/subscribe` → writes a file under `data/subscribers/`, a top-level folder deliberately outside `src/content` so it is never part of the built site.
 
-**Hard requirement:** note submissions and email addresses must go to **separate destinations with no shared identifier and no correlating timestamp**. The site publicly promises they're never linked. If they land in one spreadsheet row, the promise is false regardless of what the page says.
+**Hard requirement:** note submissions and email addresses must go to **separate destinations with no shared identifier and no correlating timestamp**. The site publicly promises they're never linked. If they land in one spreadsheet row, the promise is false regardless of what the page says. This is enforced structurally: two endpoints, two destination folders, and the note function never receives an email address.
+
+Both functions need `GITHUB_TOKEN` set in the Cloudflare Pages project (Settings → Environment variables). Without it they return 500 and submissions are lost.
 
 **Later**
-- Netlify Functions or Cloudflare Workers when real endpoints are needed. Serverless keeps the zero-idle-cost property.
+- More Pages Functions when real endpoints are needed. Serverless keeps the zero-idle-cost property.
 - If it grows past that, the whole static site can sit in front of any API — nothing about the current build constrains the choice.
 
 ---
@@ -123,14 +125,17 @@ The only "permission" is the CMS: GitHub OAuth, both founders have write access 
 ## 8. Hosting, deployment, CDN
 
 **Now**
-- **Netlify** free tier: 100GB bandwidth, global CDN, automatic HTTPS, deploy previews on PRs, instant rollback.
+- **Cloudflare Pages** free tier: unlimited bandwidth, global CDN, automatic HTTPS, deploy previews on PRs, instant rollback.
+- Live at `https://mentalnote.pages.dev`. Build command `npm run build`, output directory `dist`, Node 20 (pinned in `.nvmrc`).
 - `main` → production. Every PR → a preview URL. The co-founder can review a real rendered page before merge.
-- Custom domain with automatic Let's Encrypt.
-- Cloudflare Free in front is optional; Netlify's CDN is enough at your scale and one less thing to break.
+- Headers and redirects are files, not dashboard settings: `public/_headers` and `public/_redirects`. They ship with the build, so they are reviewable in git.
+- Note/newsletter endpoints run as Pages Functions from `functions/api/` (see §4).
+
+**Domain:** none yet. `mentalnote.org` is *not* ours — it was registered by a third party in Jul 2025, parked, and left to expire; it entered the drop cycle Aug 2026. `astro.config.mjs` points `site` at the `pages.dev` URL until we actually own a domain. Attach a custom domain in Pages → Custom domains; TLS is automatic.
 
 **Later**
-- Netlify handles far more traffic than you'll see. If a talk goes viral, static files on a CDN is the best possible position to be in — nothing to fall over.
-- Migration path if ever needed: Cloudflare Pages or Vercel, both take Astro static output directly.
+- Cloudflare handles far more traffic than you'll see. If a talk goes viral, static files on a CDN is the best possible position to be in — nothing to fall over.
+- Migration path if ever needed: Netlify or Vercel, both take Astro static output directly. The Functions would need porting; everything else is portable as-is.
 
 ---
 
@@ -187,7 +192,7 @@ This is server-rendered static HTML with no history API tricks, so `replace()` i
 
 **Now**
 - HTTPS enforced, HSTS on.
-- CSP headers in `netlify.toml` — restrictive; the only external origins are the font files (self-hosted, so none) and the form provider.
+- CSP headers in `public/_headers` — restrictive; the only external origins are the font files (self-hosted, so none) and the form provider.
 - `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`
 - No secrets in the repo. There currently are none — verify that stays true.
 - Dependabot on.
@@ -195,7 +200,7 @@ This is server-rendered static HTML with no history API tricks, so `replace()` i
 **The strongest security property you have right now is that you hold no user data.** Preserve that as long as possible. Every feature that starts collecting something is a real decision, not a small one.
 
 **Later**
-- Secrets in Netlify environment variables, never in code.
+- Secrets in Cloudflare Pages environment variables, never in code.
 - A privacy policy reviewed by an actual lawyer before any account system ships. COPPA, California AADC, and several state teen-privacy laws all attach the moment you collect data from minors.
 
 ---
@@ -203,7 +208,7 @@ This is server-rendered static HTML with no history API tricks, so `replace()` i
 ## 11. Rate limiting
 
 **Now**
-- Netlify Forms includes spam filtering; add a honeypot field.
+- The Pages Functions use a honeypot field only — no CAPTCHA (see §11).
 - Do **not** add a CAPTCHA to the note form. Someone writing something vulnerable should not be asked to prove they're human. Accept some spam — a human reads every submission anyway.
 
 **Later**
@@ -233,7 +238,7 @@ Not applicable and won't be. Static files on a CDN scale to any traffic you will
 - **Sentry** free tier (5k errors/month) for client-side JS errors. There's barely any JS, so this is close to free insurance.
 - **Plausible** or **Umami** for analytics — cookieless, no personal data, GDPR-clean. **Not Google Analytics.** The site publicly promises it doesn't track people; GA would make that false.
 - Track aggregate only: page views, referrers, which theme pages get traffic, which talks page converts. Never anything per-individual.
-- Netlify deploy logs and form submission logs cover the rest.
+- Cloudflare Pages deploy logs and Functions logs cover the rest.
 
 **Later**
 - Structured logging when there's a backend. Never log note contents or check-in contents. Ever.
@@ -244,7 +249,7 @@ Not applicable and won't be. Static files on a CDN scale to any traffic you will
 
 **Now**
 - The entire site is a git repo. That *is* the backup. Any commit rebuilds the whole thing.
-- Netlify keeps every previous deploy — rollback is one click.
+- Cloudflare Pages keeps every previous deploy — rollback is one click.
 - Form submissions export to CSV; download monthly and keep a copy off-platform.
 - No database means nothing to lose and nothing to restore.
 
@@ -274,7 +279,7 @@ mentalnote/
 │   └── styles/global.css
 ├── public/{fonts,admin/{index.html,config.yml}}
 ├── .github/workflows/ci.yml
-├── netlify.toml
+├── functions/api/     # submit-note.js, subscribe.js
 └── astro.config.mjs
 ```
 
@@ -284,7 +289,7 @@ Routes match the current filenames exactly. `/for-schools` in particular is a UR
 
 ## 17. Build order
 
-1. Astro scaffold, Netlify connected, `main` auto-deploys
+1. Astro scaffold, Cloudflare Pages connected, `main` auto-deploys
 2. `Layout.astro` + header + footer + design tokens + self-hosted fonts
 3. Port all eight pages, matching the HTML/CSS exactly
 4. Content Collections + Zod schemas

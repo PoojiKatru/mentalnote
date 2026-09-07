@@ -16,5 +16,5 @@ node_modules/
 .vscode/
 .idea/
 
-# netlify
-.netlify/
+# cloudflare (wrangler local dev / build cache)
+.wrangler/

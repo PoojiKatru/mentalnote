@@ -23,7 +23,7 @@ These are enforced, not aspirational (`ARCHITECTURE.md` §19):
    appear on every page**, in `--rose`. CI (`npm run verify:crisis`) fails the
    build if any string is missing from the built output.
 2. **The quick exit exists on every page** — CI-enforced via `data-quick-exit`.
-3. **Notes and emails are never linked.** They are two separate Netlify forms
+3. **Notes and emails are never linked.** They are two separate endpoints
    (`this-month.astro`); the note's submit never carries the email.
 4. No ads, no data sales, no third-party tracking.
 5. **The co-founder can publish without the engineer** — Sveltia CMS at `/admin`.
@@ -40,13 +40,22 @@ mirrors those schemas — change one, change both.
 
 ## Deploy
 
-Netlify, static, `main` → production, PR → preview. Security headers, CSP, and
-cache rules live in `netlify.toml`. Before launch:
+Cloudflare Pages, static, `main` → production, PR → preview. Live at
+<https://mentalnote.pages.dev>. Security headers, CSP, and cache rules live in
+`public/_headers`; redirects in `public/_redirects`. Note and newsletter
+endpoints are Pages Functions in `functions/api/`.
 
-1. Set `backend.repo` in `public/admin/config.yml` to the real GitHub repo and
-   wire GitHub OAuth for the CMS.
+Before launch:
+
+1. Set `GITHUB_TOKEN` in the Pages project (Settings → Environment variables),
+   or both forms fail silently — see `PUBLISHING.md` §5.
 2. Run the phone-publishing acceptance test (`ARCHITECTURE.md` §3).
 3. Confirm the note and email forms land in separate destinations (§4).
+
+## Day-to-day
+
+**`PUBLISHING.md`** — how to publish an article, review anonymous notes, find
+newsletter emails, and rotate the weekly theme. Written for a phone, no git.
 
 ## Structure
 
