@@ -1,12 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import PaperCard from '../components/PaperCard.astro';
 import { getCollection } from 'astro:content';
-import { formatDay, authorName } from '../lib/format';
-
-const latest = (await getCollection('articles', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 2);
+import { formatDay } from '../lib/format';
 
 const openTheme = (await getCollection('themes')).find((t) => t.data.status === 'open')!;
 ---
@@ -57,7 +52,6 @@ const openTheme = (await getCollection('themes')).find((t) => t.data.status === 
       <input type="email" name="email" placeholder="your@email.com" aria-label="Email address" required><button type="submit">Subscribe</button>
     </form>
   </div>
-  <div class="scell"><div class="k">For schools</div><p>We speak at assemblies, health classes, and student conferences. <a class="ln" href="/for-schools">See our talks →</a></p></div>
   <div class="scell"><div class="k">The app</div><p>A five-minute daily check-in that installs to your home screen. <a class="ln" href="/the-app">Add it →</a></p></div>
 </div></div>
 
@@ -66,7 +60,7 @@ const openTheme = (await getCollection('themes')).find((t) => t.data.status === 
   <div class="three">
     <a class="tcard paper lit tape" href="/articles"><h3>Articles</h3><p>We write articles every other week about a different philosophical, psychological topic or mental illness to spread awareness and evoke thoughts.</p><span>Read →</span></a>
     <a class="tcard paper lit tape" href="/the-app"><h3>Daily check-in</h3><p>Everyday the app will provide a place to vent and have some daily questions that help you start off your day right.</p><span>Open →</span></a>
-    <a class="tcard paper lit tape" href="/for-schools"><h3>Talks &amp; workshops</h3><p>We do workshops and talks to help raise awareness for mental health and also provide fun activites that allow people to learn new knowledge.</p><span>Book →</span></a>
+    <div class="tcard paper lit tape"><h3>Talks &amp; workshops</h3><p>We do workshops and talks to help raise awareness for mental health and also provide fun activites that allow people to learn new knowledge.</p></div>
   </div>
 </div></div></div>
 
@@ -77,21 +71,4 @@ const openTheme = (await getCollection('themes')).find((t) => t.data.status === 
   <div class="acts" style="margin-top:32px"><a class="b1" href="/this-week">Write a note</a><a class="b2" href="/how-it-works">What happens next →</a></div>
 </div></div>
 
-<div class="light"><div class="block"><div class="wrap rv">
-  <div class="eyebrow">Latest</div>
-  <h2>Reading.</h2>
-  <div class="arts">
-    {latest.map((a) => (
-      <PaperCard
-        href={`/articles/${a.id}`}
-        date={formatDay(a.data.date)}
-        author={authorName(a.data.author)}
-        minutes={a.data.minutes}
-        title={a.data.title}
-        excerpt={a.data.excerpt}
-      />
-    ))}
-  </div>
-  <a class="more" href="/articles">All articles →</a>
-</div></div></div>
 </Layout>

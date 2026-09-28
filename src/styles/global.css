@@ -101,7 +101,7 @@ nav .give:hover{background:var(--lilac);color:#1C1424;border-color:var(--lilac)}
 
 /* ============ signal strip — schools + list + app ============ */
 .strip{background:var(--plum-2);border-top:1px solid rgba(216,196,228,.12);border-bottom:1px solid rgba(216,196,228,.12);padding:26px 0}
-.sgrid{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:34px;align-items:center}
+.sgrid{display:grid;grid-template-columns:1.15fr 1fr;gap:34px;align-items:center}
 .scell .k{font-size:9.5px;letter-spacing:.19em;text-transform:uppercase;color:var(--thistle);font-weight:700;margin-bottom:7px}
 .scell p{font-size:14.5px;color:#B4A8BF;line-height:1.5}
 .scell a.ln{color:var(--lilac);border-bottom:1px solid rgba(216,196,228,.4)}
@@ -336,3 +336,28 @@ nav .give:hover{background:var(--lilac);color:#1C1424;border-color:var(--lilac)}
 .exit:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
 .hist{margin-top:14px;font-size:12.5px;color:#8C819A;max-width:52ch}
 @media(max-width:680px){.exit{bottom:70px;right:14px;padding:8px 12px;font-size:11.5px}}
+
+/* ============ sticky notes on a page (how it works, the app) ============ */
+.stickies{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;align-items:start}
+.stick{position:relative;padding:24px 22px 26px;font-family:var(--hand);font-size:16.5px;line-height:1.45;
+  box-shadow:9px 13px 22px rgba(43,35,51,.16),1px 2px 0 rgba(43,35,51,.07);transform:rotate(var(--r,0deg))}
+.stick span{display:block;font-family:var(--voice);font-size:30px;line-height:1;margin-bottom:12px;opacity:.55}
+.stick.s1{background:var(--wheat);color:#3A2F22;--r:-2deg;--tr:6deg}
+.stick.s2{background:var(--sage);color:#20302B;--r:1.5deg;margin-top:22px}
+.stick.s3{background:var(--almond);color:#3D2C2A;--r:-1deg;--tr:-5deg}
+.stick.s4{background:var(--lilac);color:#2C2338;--r:2deg;margin-top:14px}
+.asked{margin-top:84px;font-size:clamp(28px,3.6vw,40px)}
+.talkqa{margin-top:24px;max-width:62ch}
+.talkqa p{font-size:16px;color:#4A4255;line-height:1.6;padding:14px 0;border-bottom:1px dashed var(--hair)}
+.talkqa b{color:var(--ink)}
+.appcols{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:72px;align-items:start}
+.appcopy p{font-size:17px;color:#4A4255;line-height:1.65;max-width:54ch;margin-bottom:18px}
+.appcopy .need{margin-top:30px;padding-left:16px;border-left:2px solid var(--rose);font-size:15px}
+.getit{font-family:var(--body);font-size:15px}
+.getit strong{display:block;font-family:var(--hand);font-size:21px;font-weight:500;margin-bottom:12px}
+.getit p{margin-bottom:10px;line-height:1.5}
+.getit .go{display:inline-block;margin-top:10px;background:#291E33;color:#EFE7F4;padding:11px 20px;font-weight:700;font-size:14px;border-radius:6px}
+.goals{margin-top:24px;padding-left:22px;max-width:60ch}
+.goals li{font-size:17px;color:#4A4255;line-height:1.6;padding:6px 0}
+@media(max-width:1000px){.stickies{grid-template-columns:1fr 1fr}.appcols{grid-template-columns:1fr;gap:44px}}
+@media(max-width:560px){.stickies{grid-template-columns:1fr}.stick.s2,.stick.s4{margin-top:0}}

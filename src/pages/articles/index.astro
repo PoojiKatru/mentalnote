@@ -10,9 +10,8 @@ const articles = (await getCollection('articles', ({ data }) => !data.draft)).so
 ---
 <Layout title="Articles · Mental Note" active="articles">
 <div class="phead"><div class="wrap">
-  <div class="eyebrow">Articles</div>
-  <h1>Reading.</h1>
-  <p class="lead">Every other week. One of us writes it, the other reads it before it goes up.</p>
+  <h1>Articles</h1>
+  <p class="lead">Biweekly</p>
 </div></div>
 <div class="light"><div class="block" style="padding-top:48px"><div class="wrap rv">
   <div class="arts">
@@ -28,7 +27,7 @@ const articles = (await getCollection('articles', ({ data }) => !data.draft)).so
       />
     ))}
   </div>
-  <p class="cnt2" style="margin-top:36px">{articles.length} pieces so far. New writing every other week starting October.</p>
+  <p class="cnt2" style="margin-top:36px">{articles.length} pieces so far.</p>
 </div></div>
 
 <div class="block" style="padding-top:0"><div class="wrap rv">

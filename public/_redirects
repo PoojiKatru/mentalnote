@@ -2,3 +2,9 @@
 # /this-month was renamed to /this-week; keep old links working.
 /this-month   /this-week   301
 /this-month/  /this-week   301
+
+# /our-story became /about; /for-schools was removed.
+/our-story     /about   301
+/our-story/    /about   301
+/for-schools   /        301
+/for-schools/  /        301
