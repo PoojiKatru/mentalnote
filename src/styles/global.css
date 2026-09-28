@@ -357,7 +357,5 @@ nav .give:hover{background:var(--lilac);color:#1C1424;border-color:var(--lilac)}
 .getit strong{display:block;font-family:var(--hand);font-size:21px;font-weight:500;margin-bottom:12px}
 .getit p{margin-bottom:10px;line-height:1.5}
 .getit .go{display:inline-block;margin-top:10px;background:#291E33;color:#EFE7F4;padding:11px 20px;font-weight:700;font-size:14px;border-radius:6px}
-.goals{margin-top:24px;padding-left:22px;max-width:60ch}
-.goals li{font-size:17px;color:#4A4255;line-height:1.6;padding:6px 0}
 @media(max-width:1000px){.stickies{grid-template-columns:1fr 1fr}.appcols{grid-template-columns:1fr;gap:44px}}
 @media(max-width:560px){.stickies{grid-template-columns:1fr}.stick.s2,.stick.s4{margin-top:0}}
